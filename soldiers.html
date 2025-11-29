@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>إدارة العساكر - وزارة الداخلية</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* التنسيقات الأساسية */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f5f5;
+            color: #333;
+            display: flex;
+            min-height: 100vh;
+        }
+        
+        /* الشريط الجانبي */
+        .sidebar {
+            width: 250px;
+            background: linear-gradient(to bottom, #1e3c72, #2a5298);
+            color: white;
+            padding: 20px 0;
+            height: 100vh;
+            position: fixed;
+            right: 0;
+            top: 0;
+            overflow-y: auto;
+        }
+        
+        .sidebar-title {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 0 15px;
+            font-size: 1.5rem;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+            padding-bottom: 15px;
+        }
+        
+        .sidebar a {
+            display: flex;
+            align-items: center;
+            color: white;
+            padding: 12px 20px;
+            text-decoration: none;
+            transition: 0.3s;
+            border-right: 3px solid transparent;
+        }
+        
+        .sidebar a i {
+            margin-left: 10px;
+            font-size: 1.2rem;
+        }
+        
+        .sidebar a:hover, .sidebar a.active {
+            background-color: rgba(255,255,255,0.1);
+            border-right: 3px solid #4CAF50;
+        }
+        
+        /* المحتوى الرئيسي */
+        .content {
+            flex: 1;
+            margin-right: 250px;
+            padding: 20px;
+        }
+        
+        /* شريط التنقل العلوي */
+        .top-nav {
+            background-color: white;
+            padding: 15px 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .nav-btn {
+            background-color: #2a5298;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+        }
+        
+        .nav-btn i {
+            margin-right: 5px;
+        }
+        
+        .nav-btn:hover {
+            background-color: #1e3c72;
+        }
+        
+        /* عنوان الصفحة */
+        .page-title {
+            color: #1e3c72;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #2a5298;
+            display: flex;
+            align-items: center;
+        }
+        
+        .page-title i {
+            margin-left: 10px;
+        }
+        
+        /* شريط البحث */
+        .search-container {
+            position: relative;
+            margin-bottom: 20px;
+        }
+        
+        .search {
+            width: 100%;
+            padding: 12px 45px 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: 0.3s;
+        }
+        
+        .search:focus {
+            outline: none;
+            border-color: #2a5298;
+            box-shadow: 0 0 0 2px rgba(42, 82, 152, 0.2);
+        }
+        
+        .search-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #777;
+        }
+        
+        /* الأزرار */
+        .btn {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.3s;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .btn:hover {
+            background-color: #388E3C;
+        }
+        
+        .btn.add {
+            background-color: #2196F3;
+            margin-top: 20px;
+        }
+        
+        .btn.add:hover {
+            background-color: #1976D2;
+        }
+        
+        .btn i {
+            margin-left: 8px;
+        }
+        
+        /* أزرار الإجراءات */
+        .edit {
+            background-color: #FF9800;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-left: 5px;
+            transition: 0.3s;
+        }
+        
+        .edit:hover {
+            background-color: #F57C00;
+        }
+        
+        .delete {
+            background-color: #f44336;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        
+        .delete:hover {
+            background-color: #d32f2f;
+        }
+        
+        .view {
+            background-color: #2196F3;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-left: 5px;
+            transition: 0.3s;
+        }
+        
+        .view:hover {
+            background-color: #1976D2;
+        }
+        
+        /* الجداول */
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        
+        .table th, .table td {
+            padding: 15px;
+            text-align: right;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .table th {
+            background-color: #2a5298;
+            color: white;
+            font-weight: 600;
+        }
+        
+        .table tr:hover {
+            background-color: #f9f9f9;
+        }
+        
+        /* حالة العسكري */
+        .status {
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            display: inline-block;
+        }
+        
+        .status.connected {
+            background-color: #E8F5E9;
+            color: #2E7D32;
+        }
+        
+        .status.disconnected {
+            background-color: #FFEBEE;
+            color: #C62828;
+        }
+        
+        .status.away {
+            background-color: #FFF3E0;
+            color: #EF6C00;
+        }
+        
+        /* نافذة الإضافة والتعديل */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+        
+        .modal-content {
+            background-color: white;
+            margin: 5% auto;
+            padding: 25px;
+            border-radius: 10px;
+            width: 80%;
+            max-width: 600px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            position: relative;
+        }
+        
+        .modal h2 {
+            color: #1e3c72;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            align-items: center;
+        }
+        
+        .modal h2 i {
+            margin-left: 10px;
+        }
+        
+        .modal label {
+            display: block;
+            margin: 15px 0 8px;
+            font-weight: bold;
+            color: #555;
+        }
+        
+        .modal input, .modal select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-bottom: 5px;
+            font-size: 1rem;
+        }
+        
+        .modal input:focus, .modal select:focus {
+            outline: none;
+            border-color: #2a5298;
+            box-shadow: 0 0 0 2px rgba(42, 82, 152, 0.2);
+        }
+        
+        .modal-buttons {
+            display: flex;
+            justify-content: flex-start;
+            margin-top: 25px;
+            gap: 10px;
+        }
+        
+        .close {
+            color: #aaa;
+            position: absolute;
+            left: 20px;
+            top: 20px;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        
+        .close:hover {
+            color: black;
+        }
+        
+        /* بطاقة العسكري */
+        .soldier-card {
+            display: none;
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            margin-top: 20px;
+        }
+        
+        .soldier-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .soldier-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(to bottom, #2a5298, #1e3c72);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2rem;
+            margin-left: 20px;
+        }
+        
+        .soldier-info h3 {
+            color: #1e3c72;
+            margin-bottom: 5px;
+        }
+        
+        .soldier-info p {
+            color: #777;
+        }
+        
+        .soldier-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+        
+        .detail-item {
+            margin-bottom: 15px;
+        }
+        
+        .detail-item label {
+            font-weight: bold;
+            color: #555;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .detail-item span {
+            color: #333;
+        }
+        
+        /* التكيف مع الشاشات الصغيرة */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 70px;
+            }
+            
+            .sidebar-title, .sidebar a span {
+                display: none;
+            }
+            
+            .sidebar a {
+                justify-content: center;
+                padding: 15px;
+            }
+            
+            .sidebar a i {
+                margin-left: 0;
+            }
+            
+            .content {
+                margin-right: 70px;
+            }
+            
+            .table {
+                display: block;
+                overflow-x: auto;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- نافذة إضافة وتعديل العسكري -->
+    <div id="soldierModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2 id="modal-title"><i class="fas fa-user-plus"></i> إضافة عسكري جديد</h2>
+            
+            <form id="soldierForm">
+                <label>اسم العسكري:</label>
+                <input type="text" id="soldierName" required>
+                
+                <label>الرتبة:</label>
+                <select id="soldierRank" required>
+                    <option value="">-- اختر الرتبة --</option>
+                    <option value="جندي">جندي</option>
+                    <option value="عريف">عريف</option>
+                    <option value="رقيب">رقيب</option>
+                    <option value="ملازم">ملازم</option>
+                    <option value="ملازم أول">ملازم أول</option>
+                    <option value="نقيب">نقيب</option>
+                    <option value="رائد">رائد</option>
+                    <option value="مقدم">مقدم</option>
+                    <option value="عقيد">عقيد</option>
+                    <option value="عميد">عميد</option>
+                </select>
+                
+                <label>الوحدة:</label>
+                <input type="text" id="soldierUnit">
+                
+                <label>رقم الهوية:</label>
+                <input type="text" id="soldierId">
+                
+                <label>رقم الهاتف:</label>
+                <input type="tel" id="soldierPhone">
+                
+                <label>الحالة:</label>
+                <select id="soldierStatus">
+                    <option value="متصل">متصل</option>
+                    <option value="غير متصل">غير متصل</option>
+                    <option value="في مهمة">في مهمة</option>
+                    <option value="إجازة">إجازة</option>
+                </select>
+                
+                <div class="modal-buttons">
+                    <button type="button" id="saveSoldier" class="btn"><i class="fas fa-save"></i> حفظ</button>
+                    <button type="button" class="close-btn" onclick="closeModal()"><i class="fas fa-times"></i> إلغاء</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- زر الرجوع للقائمة الرئيسية -->
+    <div class="top-nav">
+        <a href="dashboard.html" class="nav-btn" id="home-btn" aria-label="الرجوع للقائمة الرئيسية">
+            <i class="fas fa-arrow-right"></i> الرجوع للقائمة الرئيسية
+        </a>
+        <div>
+            <span id="currentDate" style="color: #1e3c72; font-weight: bold;"></span>
+        </div>
+    </div>
+
+    <aside class="sidebar">
+        <h2 class="sidebar-title">الداخلية</h2>
+        <a href="/HTML/dashboard.html">
+            <i class="fas fa-tachometer-alt"></i>
+            <span>لوحة التحكم</span>
+        </a>
+        <a href="/HTML/soldiers.html" class="active">
+            <i class="fas fa-users"></i>
+            <span>إدارة العساكر</span>
+        </a>
+        <a href="/HTML/reports.html">
+            <i class="fas fa-file-alt"></i>
+            <span>التقارير</span>
+        </a>
+        <a href="https://docs.google.com/spreadsheets/d/1yZ7hI57QrD9jdbdNamOX5vXsgrda9bOpOUbX2WMzdiw/edit?gid=0#gid=0">
+            <i class="fas fa-table"></i>
+            <span>جدول الوزارة</span>
+        </a>
+        <a href="https://docs.google.com/document/d/1arc-CyNVAr3pQRgmWHCorJRb407QufIKWwndy9s-H2o/edit?tab=t.0">
+            <i class="fas fa-book"></i>
+            <span>كتيب الوزارة</span>
+        </a>
+    </aside>
+
+    <!-- المحتوى الرئيسي -->
+    <div class="content">
+
+        <h1 class="page-title"><i class="fas fa-users"></i> إدارة العساكر</h1>
+
+        <div class="search-container">
+            <input class="search" placeholder="ابحث عن عسكري بالاسم أو الرتبة...">
+            <i class="fas fa-search search-icon"></i>
+        </div>
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>الاسم</th>
+                    <th>الرتبة</th>
+                    <th>الوحدة</th>
+                    <th>الحالة</th>
+                    <th>الإجراءات</th>
+                </tr>
+            </thead>
+            <tbody id="soldiersTable">
+                <!-- سيتم ملء البيانات بواسطة JavaScript -->
+            </tbody>
+        </table>
+
+        <button class="btn add" onclick="openModal()"><i class="fas fa-user-plus"></i> إضافة عسكري</button>
+
+        <!-- بطاقة عرض بيانات العسكري -->
+        <div id="soldierCard" class="soldier-card">
+            <div class="soldier-header">
+                <div class="soldier-avatar" id="soldierAvatar">AS</div>
+                <div class="soldier-info">
+                    <h3 id="cardName">أحمد سعود</h3>
+                    <p id="cardRank">ملازم</p>
+                </div>
+            </div>
+            
+            <div class="soldier-details">
+                <div class="detail-item">
+                    <label>الوحدة:</label>
+                    <span id="cardUnit">الوحدة الخاصة</span>
+                </div>
+                <div class="detail-item">
+                    <label>رقم الهوية:</label>
+                    <span id="cardId">123456</span>
+                </div>
+                <div class="detail-item">
+                    <label>رقم الهاتف:</label>
+                    <span id="cardPhone">0551234567</span>
+                </div>
+                <div class="detail-item">
+                    <label>الحالة:</label>
+                    <span id="cardStatus" class="status connected">متصل</span>
+                </div>
+                <div class="detail-item">
+                    <label>تاريخ الانضمام:</label>
+                    <span id="cardJoinDate">2024-01-15</span>
+                </div>
+                <div class="detail-item">
+                    <label>آخر نشاط:</label>
+                    <span id="cardLastActivity">قبل ساعتين</span>
+                </div>
+            </div>
+            
+            <div style="margin-top: 20px; display: flex; gap: 10px;">
+                <button class="btn" onclick="editSoldierFromCard()"><i class="fas fa-edit"></i> تعديل البيانات</button>
+                <button class="close-btn" onclick="closeSoldierCard()"><i class="fas fa-times"></i> إغلاق</button>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // بيانات العساكر (يمكن استبدالها بقاعدة بيانات حقيقية)
+        let soldiers = [
+            { id: 1, name: "أحمد سعود", rank: "ملازم", unit: "الوحدة الخاصة", status: "متصل", idNumber: "123456", phone: "0551234567", joinDate: "2024-01-15", lastActivity: "قبل ساعتين" },
+            { id: 2, name: "محمد علي", rank: "رقيب", unit: "وحدة المرور", status: "في مهمة", idNumber: "234567", phone: "0552345678", joinDate: "2023-11-20", lastActivity: "قبل 5 ساعات" },
+            { id: 3, name: "خالد حسن", rank: "جندي", unit: "الحرس الوطني", status: "غير متصل", idNumber: "345678", phone: "0553456789", joinDate: "2024-02-10", lastActivity: "أمس" },
+            { id: 4, name: "سعيد عبدالله", rank: "نقيب", unit: "الاستخبارات", status: "متصل", idNumber: "456789", phone: "0554567890", joinDate: "2023-09-05", lastActivity: "قبل 30 دقيقة" },
+            { id: 5, name: "فهد ناصر", rank: "عريف", unit: "الدفاع المدني", status: "إجازة", idNumber: "567890", phone: "0555678901", joinDate: "2024-03-12", lastActivity: "قبل 3 أيام" }
+        ];
+        
+        // متغيرات للتعديل
+        let editingSoldierId = null;
+        
+        // عرض التاريخ الحالي
+        document.getElementById('currentDate').textContent = new Date().toLocaleDateString('ar-SA');
+        
+        // عرض العساكر في الجدول
+        function displaySoldiers() {
+            const tableBody = document.getElementById('soldiersTable');
+            tableBody.innerHTML = '';
+            
+            soldiers.forEach(soldier => {
+                const statusClass = getStatusClass(soldier.status);
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${soldier.name}</td>
+                    <td>${soldier.rank}</td>
+                    <td>${soldier.unit}</td>
+                    <td><span class="status ${statusClass}">${soldier.status}</span></td>
+                    <td>
+                        <button class="view" onclick="viewSoldier(${soldier.id})"><i class="fas fa-eye"></i> عرض</button>
+                        <button class="edit" onclick="editSoldier(${soldier.id})"><i class="fas fa-edit"></i> تعديل</button>
+                        <button class="delete" onclick="deleteSoldier(${soldier.id})"><i class="fas fa-trash"></i> حذف</button>
+                    </td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+        
+        // الحصول على كلاس الحالة
+        function getStatusClass(status) {
+            switch(status) {
+                case 'متصل': return 'connected';
+                case 'غير متصل': return 'disconnected';
+                case 'في مهمة': return 'away';
+                case 'إجازة': return 'away';
+                default: return 'disconnected';
+            }
+        }
+        
+        // فتح نافذة الإضافة
+        function openModal() {
+            editingSoldierId = null;
+            document.getElementById('modal-title').innerHTML = '<i class="fas fa-user-plus"></i> إضافة عسكري جديد';
+            document.getElementById('soldierForm').reset();
+            document.getElementById('soldierModal').style.display = 'block';
+        }
+        
+        // إغلاق النافذة
+        function closeModal() {
+            document.getElementById('soldierModal').style.display = 'none';
+        }
+        
+        // عرض بيانات العسكري
+        function viewSoldier(id) {
+            const soldier = soldiers.find(s => s.id === id);
+            if (soldier) {
+                document.getElementById('cardName').textContent = soldier.name;
+                document.getElementById('cardRank').textContent = soldier.rank;
+                document.getElementById('cardUnit').textContent = soldier.unit;
+                document.getElementById('cardId').textContent = soldier.idNumber;
+                document.getElementById('cardPhone').textContent = soldier.phone;
+                document.getElementById('cardStatus').textContent = soldier.status;
+                document.getElementById('cardStatus').className = `status ${getStatusClass(soldier.status)}`;
+                document.getElementById('cardJoinDate').textContent = soldier.joinDate;
+                document.getElementById('cardLastActivity').textContent = soldier.lastActivity;
+                
+                // إنشاء الأحرف الأولى من الاسم للأفاتار
+                const nameParts = soldier.name.split(' ');
+                const initials = (nameParts[0].charAt(0) + (nameParts[1] ? nameParts[1].charAt(0) : '')).toUpperCase();
+                document.getElementById('soldierAvatar').textContent = initials;
+                
+                document.getElementById('soldierCard').style.display = 'block';
+            }
+        }
+        
+        // إغلاق بطاقة العسكري
+        function closeSoldierCard() {
+            document.getElementById('soldierCard').style.display = 'none';
+        }
+        
+        // تعديل العسكري من البطاقة
+        function editSoldierFromCard() {
+            const soldierName = document.getElementById('cardName').textContent;
+            const soldier = soldiers.find(s => s.name === soldierName);
+            if (soldier) {
+                editSoldier(soldier.id);
+                closeSoldierCard();
+            }
+        }
+        
+        // تعديل العسكري
+        function editSoldier(id) {
+            const soldier = soldiers.find(s => s.id === id);
+            if (soldier) {
+                editingSoldierId = id;
+                document.getElementById('modal-title').innerHTML = '<i class="fas fa-edit"></i> تعديل بيانات العسكري';
+                document.getElementById('soldierName').value = soldier.name;
+                document.getElementById('soldierRank').value = soldier.rank;
+                document.getElementById('soldierUnit').value = soldier.unit;
+                document.getElementById('soldierId').value = soldier.idNumber;
+                document.getElementById('soldierPhone').value = soldier.phone;
+                document.getElementById('soldierStatus').value = soldier.status;
+                document.getElementById('soldierModal').style.display = 'block';
+            }
+        }
+        
+        // حذف العسكري
+        function deleteSoldier(id) {
+            if (confirm('هل أنت متأكد من حذف هذا العسكري؟')) {
+                soldiers = soldiers.filter(soldier => soldier.id !== id);
+                displaySoldiers();
+                alert('تم حذف العسكري بنجاح');
+            }
+        }
+        
+        // حفظ العسكري (إضافة أو تعديل)
+        document.getElementById('saveSoldier').addEventListener('click', function() {
+            const name = document.getElementById('soldierName').value;
+            const rank = document.getElementById('soldierRank').value;
+            const unit = document.getElementById('soldierUnit').value;
+            const idNumber = document.getElementById('soldierId').value;
+            const phone = document.getElementById('soldierPhone').value;
+            const status = document.getElementById('soldierStatus').value;
+            
+            if (!name || !rank) {
+                alert('يرجى ملء الحقول المطلوبة (الاسم والرتبة)');
+                return;
+            }
+            
+            if (editingSoldierId) {
+                // تعديل العسكري الموجود
+                const soldierIndex = soldiers.findIndex(s => s.id === editingSoldierId);
+                if (soldierIndex !== -1) {
+                    soldiers[soldierIndex] = {
+                        ...soldiers[soldierIndex],
+                        name,
+                        rank,
+                        unit,
+                        idNumber,
+                        phone,
+                        status
+                    };
+                }
+                alert('تم تعديل بيانات العسكري بنجاح');
+            } else {
+                // إضافة عسكري جديد
+                const newSoldier = {
+                    id: soldiers.length > 0 ? Math.max(...soldiers.map(s => s.id)) + 1 : 1,
+                    name,
+                    rank,
+                    unit,
+                    idNumber,
+                    phone,
+                    status,
+                    joinDate: new Date().toISOString().split('T')[0],
+                    lastActivity: 'الآن'
+                };
+                
+                soldiers.push(newSoldier);
+                alert('تم إضافة العسكري بنجاح');
+            }
+            
+            displaySoldiers();
+            closeModal();
+        });
+        
+        // البحث عن العساكر
+        document.querySelector('.search').addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            const filteredSoldiers = soldiers.filter(soldier => 
+                soldier.name.toLowerCase().includes(searchTerm) || 
+                soldier.rank.toLowerCase().includes(searchTerm)
+            );
+            
+            const tableBody = document.getElementById('soldiersTable');
+            tableBody.innerHTML = '';
+            
+            filteredSoldiers.forEach(soldier => {
+                const statusClass = getStatusClass(soldier.status);
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${soldier.name}</td>
+                    <td>${soldier.rank}</td>
+                    <td>${soldier.unit}</td>
+                    <td><span class="status ${statusClass}">${soldier.status}</span></td>
+                    <td>
+                        <button class="view" onclick="viewSoldier(${soldier.id})"><i class="fas fa-eye"></i> عرض</button>
+                        <button class="edit" onclick="editSoldier(${soldier.id})"><i class="fas fa-edit"></i> تعديل</button>
+                        <button class="delete" onclick="deleteSoldier(${soldier.id})"><i class="fas fa-trash"></i> حذف</button>
+                    </td>
+                `;
+                tableBody.appendChild(row);
+            });
+        });
+        
+        // إغلاق النوافذ المنبثقة عند النقر خارجها
+        window.onclick = function(event) {
+            const modal = document.getElementById('soldierModal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        }
+        
+        // تهيئة الصفحة عند التحميل
+        document.addEventListener('DOMContentLoaded', function() {
+            displaySoldiers();
+        });
+    </script>
+</body>
+</html>
