@@ -20,7 +20,7 @@
             min-height: 100vh;
         }
         
-         /* الشريط الجانبي */
+        /* الشريط الجانبي */
         .sidebar {
             width: 250px;
             background: linear-gradient(to bottom, #1e3c72, #2a5298);
@@ -31,7 +31,6 @@
             right: 0;
             top: 0;
             overflow-y: auto;
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
         }
         
         .sidebar-title {
@@ -507,15 +506,15 @@
 
     <aside class="sidebar">
         <h2 class="sidebar-title">الداخلية</h2>
-        <a href="dashboard.html">
+        <a href="/HTML/dashboard.html">
             <i class="fas fa-tachometer-alt"></i>
             <span>لوحة التحكم</span>
         </a>
-        <a href="soldiers.html">
+        <a href="/HTML/soldiers.html" class="active">
             <i class="fas fa-users"></i>
             <span>إدارة العساكر</span>
         </a>
-        <a href="reports.html" class="active">
+        <a href="/HTML/reports.html">
             <i class="fas fa-file-alt"></i>
             <span>التقارير</span>
         </a>
@@ -604,11 +603,38 @@
     <script>
         // بيانات العساكر (يمكن استبدالها بقاعدة بيانات حقيقية)
         let soldiers = [
-            { id: 1, name: "أحمد سعود", rank: "ملازم", unit: "الوحدة الخاصة", status: "متصل", idNumber: "123456", phone: "0551234567", joinDate: "2024-01-15", lastActivity: "قبل ساعتين" },
-            { id: 2, name: "محمد علي", rank: "رقيب", unit: "وحدة المرور", status: "في مهمة", idNumber: "234567", phone: "0552345678", joinDate: "2023-11-20", lastActivity: "قبل 5 ساعات" },
-            { id: 3, name: "خالد حسن", rank: "جندي", unit: "الحرس الوطني", status: "غير متصل", idNumber: "345678", phone: "0553456789", joinDate: "2024-02-10", lastActivity: "أمس" },
-            { id: 4, name: "سعيد عبدالله", rank: "نقيب", unit: "الاستخبارات", status: "متصل", idNumber: "456789", phone: "0554567890", joinDate: "2023-09-05", lastActivity: "قبل 30 دقيقة" },
-            { id: 5, name: "فهد ناصر", rank: "عريف", unit: "الدفاع المدني", status: "إجازة", idNumber: "567890", phone: "0555678901", joinDate: "2024-03-12", lastActivity: "قبل 3 أيام" }
+            { id: 1, name: "Alexander Mahon", rank: "رئيس الشرطة", unit: "قيادة الشرطة", status: "متصل", idNumber: "123456", phone: "0551234567", joinDate: "2024-01-15", lastActivity: "قبل ساعتين" },
+            { id: 2, name: "Nashit AlHamori A-3", rank: "قائد الشرطة", unit: "قيادة الشرطة", status: "في مهمة", idNumber: "234567", phone: "0552345678", joinDate: "2023-11-20", lastActivity: "قبل 5 ساعات" },
+            { id: 3, name: "John Michael", rank: "رائد", unit: "شرطة لوس سانتوس", status: "غير متصل", idNumber: "345678", phone: "0553456789", joinDate: "2024-02-10", lastActivity: "أمس" },
+            { id: 4, name: "Alkhalil Alhussini", rank: "رائد", unit: "شرطة لوس سانتوس", status: "متصل", idNumber: "456789", phone: "0554567890", joinDate: "2023-09-05", lastActivity: "قبل 30 دقيقة" },
+            { id: 5, name: "jymes jordn", rank: "ملازم", unit: "شرطة لوس سانتوس", status: "إجازة", idNumber: "567890", phone: "0555678901", joinDate: "2024-03-12", lastActivity: "قبل 3 أيام" },
+            { id: 6, name: "Swilm Alqfl", rank: "ملازم", unit: "شرطة لوس سانتوس", status: "إجازة", idNumber: "567890", phone: "0555678901", joinDate: "2024-03-12", lastActivity: "قبل 3 أيام" },
+            { id: 7, name: "ROBIN RWIEN", rank: "رئيس رقباء", unit: "شرطة لوس سانتوس", status: "إجازة", idNumber: "567890", phone: "0555678901", joinDate: "2024-03-12", lastActivity: "قبل 3 أيام" },
+            { id: 8, name: "Muntadhar Al-Ajami", rank: "رقيب", unit:"شرطة لوس سانتوس", status: "إجازة", idNumber: "567890", phone: "0555678901", joinDate: "2024-03-12", lastActivity: "قبل 3 أيام" },
+            { id: 9, name: "Salim Almusalm", rank: "وكيل رقيب", unit: "شرطة لوس سانتوس", status: "إجازة", idNumber: "567890", phone: "0555678901", joinDate: "2024-03-12", lastActivity: "قبل 3 أيام" },
+            { id: 10, name: "حمود سكوت", rank: "وكيل رقيب", unit: "شرطة لوس سانتوس", status: "إجازة", idNumber: "567890", phone: "0555678901", joinDate: "2024-03-12", lastActivity: "قبل 3 أيام" },
+            { id: 11, name: "Hafed Alrahal", rank: "عريف", unit: "شرطة لوس سانتوس", status: "إجازة", idNumber: "567890", phone: "0555678901", joinDate: "2024-03-12", lastActivity: "قبل 3 أيام" },
+            { id: 12, name: "مشحاب سلاح", rank: "عريف", unit: "شرطة لوس سانتوس", status: "إجازة", idNumber: "567890", phone: "0555678901", joinDate: "2024-03-12", lastActivity: "قبل 3 أيام" },
+            { id: 13, name: "khaliid fahd ", rank: "عريف", unit: "شرطة لوس سانتوس", status: "إجازة", idNumber: "567890", phone: "0555678901", joinDate: "2024-03-12", lastActivity: "قبل 3 أيام" },
+            { id: 14, name: "محمد السلماني ", rank: "عريف", unit: "شرطة لوس سانتوس", status: "إجازة", idNumber: "567890", phone: "0555678901", joinDate: "2024-03-12", lastActivity: "قبل 3 أيام" },
+            { id: 15, name: "عسكر الزدجالي", rank: "عريف", unit: "شرطة لوس سانتوس", status: "إجازة", idNumber: "567890", phone: "0555678901", joinDate: "2024-03-12", lastActivity: "قبل 3 أيام" },
+            { id: 16, name: " سيف ال مقورف", rank: "عريف", unit: "شرطة لوس سانتوس", status: "إجازة", idNumber: "567890", phone: "0555678901", joinDate: "2024-03-12", lastActivity: "قبل 3 أيام" },
+            { id: 17, name: "زير سالم", rank: "عريف", unit: "شرطة لوس سانتوس", status: "إجازة", idNumber: "567890", phone: "0555678901", joinDate: "2024-03-12", lastActivity: "قبل 3 أيام" },
+            { id: 18, name: "bashar ali", rank: "جندي أول", unit: "شرطة لوس سانتوس", status: "إجازة", idNumber: "567890", phone: "0555678901", joinDate: "2024-03-12", lastActivity: "قبل 3 أيام" },
+            { id: 19, name: "mshan alanflati", rank: "جندي أول", unit: "شرطة لوس سانتوس", status: "إجازة", idNumber: "567890", phone: "0555678901", joinDate: "2024-03-12", lastActivity: "قبل 3 أيام" },
+            { id: 20, name: "JAMS WALTER", rank: "جندي أول", unit: "شرطة لوس سانتوس", status: "إجازة", idNumber: "567890", phone: "0555678901", joinDate: "2024-03-12", lastActivity: "قبل 3 أيام" },
+            { id: 21, name: "shamik alasad", rank: "جندي أول", unit: "شرطة لوس سانتوس", status: "إجازة", idNumber: "567890", phone: "0555678901", joinDate: "2024-03-12", lastActivity: "قبل 3 أيام" },
+            { id: 22, name: "kane e", rank: "جندي أول", unit: "شرطة لوس سانتوس", status: "إجازة", idNumber: "567890", phone: "0555678901", joinDate: "2024-03-12", lastActivity: "قبل 3 أيام" },
+            { id: 23, name: " sam alazri", rank: "جندي أول", unit: "شرطة لوس سانتوس", status: "إجازة", idNumber: "567890", phone: "0555678901", joinDate: "2024-03-12", lastActivity: "قبل 3 أيام" },
+            { id: 24, name: "laith said", rank: "جندي", unit: "شرطة لوس سانتوس", status: "إجازة", idNumber: "567890", phone: "0555678901", joinDate: "2024-03-12", lastActivity: "قبل 3 أيام" },
+            { id: 25, name: "Khaled Muhammad", rank: "جندي", unit: "شرطة لوس سانتوس", status: "إجازة", idNumber: "567890", phone: "0555678901", joinDate: "2024-03-12", lastActivity: "قبل 3 أيام" },
+            { id: 26, name: "ALZIR Salem", rank: "جندي", unit: "شرطة لوس سانتوس", status: "إجازة", idNumber: "567890", phone: "0555678901", joinDate: "2024-03-12", lastActivity: "قبل 3 أيام" },
+            { id: 27, name: "عزان بالستي", rank: "جندي", unit: "شرطة لوس سانتوس", status: "إجازة", idNumber: "567890", phone: "0555678901", joinDate: "2024-03-12", lastActivity: "قبل 3 أيام" },
+            { id: 28, name: "NOOH ADIM", rank: "جندي", unit: "شرطة لوس سانتوس", status: "إجازة", idNumber: "567890", phone: "0555678901", joinDate: "2024-03-12", lastActivity: "قبل 3 أيام" },
+            { id: 29, name: "OSAMA ALI", rank: "جندي", unit: "شرطة لوس سانتوس", status: "إجازة", idNumber: "567890", phone: "0555678901", joinDate: "2024-03-12", lastActivity: "قبل 3 أيام" },
+            
+
+
         ];
         
         // متغيرات للتعديل
@@ -821,7 +847,4 @@
         });
     </script>
 </body>
-
 </html>
-
-
